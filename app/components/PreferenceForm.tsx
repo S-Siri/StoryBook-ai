@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import StoryDisplay from "./components/StoryDisplay";
+import StoryDisplay from "../story/StoryDisplay";
 
 const PreferenceForm = () => {
   const [preferences, setPreferences] = useState({

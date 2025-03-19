@@ -1,17 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import StoryDisplay from "./components/StoryDisplay";
+import StoryDisplay from "../components/StoryDisplay";
 
 const PreferenceForm = () => {
   const [preferences, setPreferences] = useState({
     characterName: "",
     theme: "",
-    genre: "Fantasy",
-    language: "English",
+    language: "english",
     moralMessage: "",
   });
-
   const [story, setStory] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(false);
@@ -82,27 +80,14 @@ const PreferenceForm = () => {
         />
 
         <select
-          name="genre"
-          value={preferences.genre}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        >
-          <option>Fantasy</option>
-          <option>Adventure</option>
-          <option>Mystery</option>
-          <option>Comedy</option>
-          <option>Education</option>
-        </select>
-
-        <select
           name="language"
           value={preferences.language}
           onChange={handleChange}
           className="w-full p-2 border rounded"
         >
-          <option>English</option>
-          <option>Hindi</option>
-          <option>Telugu</option>
+          <option value="english">English</option>
+          <option value="hindi">Hindi</option>
+          <option value="telugu">Telugu</option>
         </select>
 
         <input
@@ -130,4 +115,4 @@ const PreferenceForm = () => {
   );
 };
 
-export default PreferenceForm;
+export default PreferenceForm;  
