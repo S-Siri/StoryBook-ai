@@ -1,12 +1,60 @@
 "use client";
-import Image from "next/image";
 import { useState } from "react";
+import Image from "next/image";
+import { uploadFileToStorage, saveStoryToSupabase } from "../utils/supabaseFunctions";
+import { supabase } from "@/config/supabaseConfig";
 
 interface StoryDisplayProps {
   story: string;
   imageUrl: string | undefined;
   onGenerateNew: () => void;
 }
+
+const fetchBlobAsFile = async (url: string, fileName: string, type: string): Promise<File> => {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  return new File([blob], fileName, { type });
+};
+
+const handleSaveStory = async (story: string, imageUrl: string) => {
+  const { data: user } = await supabase.auth.getUser();
+  
+  if (!user?.user) {
+    alert("You must be logged in to save your story.");
+    return;
+  }
+
+  try {
+    const imageFile = await fetchBlobAsFile(imageUrl, `${Date.now()}_story.png`, "image/png");
+    const audioFile = await fetchBlobAsFile("http://127.0.0.1:5002/get_audio", `${Date.now()}_story.mp3`, "audio/mp3");
+
+    const imagePath = `images/${user.user.id}/${imageFile.name}`;
+    const audioPath = `audio/${user.user.id}/${audioFile.name}`;
+
+    const uploadedImageUrl = await uploadFileToStorage(imageFile, imagePath);
+    const uploadedAudioUrl = await uploadFileToStorage(audioFile, audioPath);
+
+    if (!uploadedImageUrl || !uploadedAudioUrl) {
+      throw new Error("File upload failed.");
+    }
+
+    const saveSuccess = await saveStoryToSupabase(
+      user.user.id,
+      story,
+      uploadedImageUrl,
+      uploadedAudioUrl
+    );
+
+    if (saveSuccess) {
+      alert("Story saved successfully!");
+    } else {
+      throw new Error("Failed to save story.");
+    }
+  } catch (error: any) {
+    console.error("Save Error:", error.message || error);
+    alert(`Failed to save story: ${error.message || "Unknown error"}`);
+  }
+};
 
 export default function StoryDisplay({ story, imageUrl, onGenerateNew }: StoryDisplayProps) {
   const [isImageLoading, setIsImageLoading] = useState(true);
@@ -35,6 +83,13 @@ export default function StoryDisplay({ story, imageUrl, onGenerateNew }: StoryDi
       ) : (
         <p className="text-gray-500">No image available. Ensure the image URL is generated properly.</p>
       )}
+
+      <button
+        onClick={() => handleSaveStory(story, imageUrl || "")}
+        className="mt-4 p-3 bg-green-500 text-white font-bold rounded hover:bg-green-600"
+      >
+        Save Story
+      </button>
 
       <button
         onClick={onGenerateNew}

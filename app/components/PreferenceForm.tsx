@@ -1,9 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import StoryDisplay from "../story/StoryDisplay";
 
-const PreferenceForm = () => {
+interface PreferenceFormProps {
+  setStory: (story: string) => void;
+  setImageUrl: (url: string) => void;
+}
+
+const PreferenceForm: React.FC<PreferenceFormProps> = ({ setStory, setImageUrl }) => {
   const [preferences, setPreferences] = useState({
     characterName: "",
     theme: "",
@@ -12,8 +16,6 @@ const PreferenceForm = () => {
     moralMessage: "",
   });
 
-  const [story, setStory] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -36,6 +38,7 @@ const PreferenceForm = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(preferences),
       });
+
       if (!storyResponse.ok) throw new Error("Failed to generate story");
       const storyData = await storyResponse.json();
       setStory(storyData.story);
@@ -46,6 +49,7 @@ const PreferenceForm = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: storyData.story }),
       });
+
       if (!imageResponse.ok) throw new Error("Failed to generate image");
       const imageData = await imageResponse.json();
       setImageUrl(imageData.imageUrl);
@@ -124,8 +128,6 @@ const PreferenceForm = () => {
       </form>
 
       {error && <p className="text-red-500 mt-4">Error: {error}</p>}
-
-      {story && <StoryDisplay story={story} imageUrl={imageUrl} onGenerateNew={() => setStory("")} />}
     </div>
   );
 };
