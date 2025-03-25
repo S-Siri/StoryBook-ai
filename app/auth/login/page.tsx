@@ -20,26 +20,44 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10">
-      <h1 className="text-2xl mb-4">Login</h1>
-      {error && <p className="text-red-500">{error}</p>}
-      <form onSubmit={handleLogin} className="space-y-4">
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          className="w-full p-2 border rounded"
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          className="w-full p-2 border rounded"
-        />
-        <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">Login</button>
-      </form>
+    <div className="d-flex justify-content-center align-items-center vh-100 bg-primary bg-gradient">
+      <div className="card p-5" style={{ width: "400px" }}>
+        <h1 className="text-center text-primary">WELCOME!</h1>
+        <p className="text-center text-secondary">Login to continue</p>
+        {error && <p className="text-danger text-center">{error}</p>}
+        <form onSubmit={handleLogin}>
+          <div className="mb-3">
+            <label className="form-label">Username</label>
+            <input
+              type="email"
+              className="form-control"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Password</label>
+            <input
+              type="password"
+              className="form-control"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <a href="#" className="d-block mb-3 text-primary">
+            Forgot Password?
+          </a>
+          <button className="btn btn-primary w-100">LOGIN</button>
+        </form>
+        <div className="text-center mt-3">
+          Don't have an account?{" "}
+          <a href="/auth/signup" className="text-primary">
+            Create Account
+          </a>
+        </div>
+      </div>
     </div>
   );
 }

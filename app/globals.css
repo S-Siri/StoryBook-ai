@@ -4,6 +4,39 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Background Animation */
+.bg-animated {
+  background: linear-gradient(135deg, #512da8, #7e57c2, #ba68c8);
+  animation: gradientShift 8s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Stars Effect */
+.stars {
+  background: url('/images/stars.png') repeat;
+  animation: twinkle 3s infinite alternate;
+  opacity: 0.8;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.8; }
+  100% { opacity: 0.3; }
+}
+
+
+.bg-custom {
+  background: linear-gradient(180deg, #7b2cbf, #c77dff);
+}
+
+.bg-header-custom {
+  background: linear-gradient(45deg, #8e44ad, #e056fd);
+  border-radius: 20px 20px 0 0;
+}
 
 :root {
   --background: #ffffff;
